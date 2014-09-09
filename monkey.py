@@ -22,6 +22,7 @@ optreplace = 1
 optrename = 1
 optappend = 1
 optremove = 1
+otpcopy = 1
 
 
 #########################################################
@@ -131,7 +132,11 @@ def ranaction(path):
       elif action == 4 and optremove:
 
          remove(path)
-         
+
+      elif action == 5 and optcopy:
+    
+         copy(path)
+
    except Exception as e:
       error(e)
    
@@ -165,6 +170,13 @@ def rename(path):
    files.remove(path)
    files.append(newpath)
 
+def copy(path):
+
+    newpath = "{0}/{1}".format(os.path.dirname(path), ranname())
+    shutil.copy2(path, newpath)
+    
+    print "Copied:\n\t{0} \n\t{1}".format(path, newpath)
+    files.append(newpath)
 
 def append(path):
   
@@ -226,7 +238,7 @@ def monkey():
 
 def parseargs():
 
-   global speed, rebuild, showerrors, optcreate, optreplace, optrename, optappend, optremove, filesperdir, root, wipe
+   global speed, rebuild, showerrors, optcreate, optreplace, optrename, optappend, optremove, optcopy, filesperdir, root, wipe
    
    parser = argparse.ArgumentParser()
    parser.add_argument("-i", "--input", help="Folder to monkey", type=str, default=root)
@@ -240,6 +252,7 @@ def parseargs():
    parser.add_argument("--norename", help="Don't rename files", action="store_true")
    parser.add_argument("--noappend", help="Don't append to files", action="store_true")
    parser.add_argument("--noremove", help="Don't remove files", action="store_true")
+   parser.add_argument("--nocopy", help="Don't copy files", action="store_true")
    args = parser.parse_args()
 
    root = args.input
@@ -253,6 +266,7 @@ def parseargs():
    optrename = not args.norename
    optappend = not args.noappend
    optremove = not args.noremove
+   optcopy = not args.nocopy
 
    return 1
 
