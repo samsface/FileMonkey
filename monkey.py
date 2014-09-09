@@ -50,9 +50,10 @@ def ranname():
 
 def createroot():
 
-
    if os.path.exists(root) and wipe:
       shutil.rmtree(root)
+      
+   if not os.path.exists(root):
       os.makedirs(root)
 
    return root
